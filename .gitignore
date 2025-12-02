@@ -1,0 +1,46 @@
+# Symfony
+/var/
+/vendor/
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/public/build/
+
+# Node
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+/python-service/venv/
+/python-service/.env
+/python-service/models/
+/python-service/training_data/
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# Local certificates
+cacert.pem
+
+# Setup scripts (local only)
+setup_db.sql

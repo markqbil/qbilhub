@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hub Inbox - Qbil Hub{% endblock %}
+
+{% block body %}
+<div class="hub-inbox-container">
+    <div class="inbox-header">
+        <h2>Hub Inbox</h2>
+        <div class="inbox-controls">
+            <select id="inbox-filter" class="filter-dropdown">
+                <option value="my">My Inbox</option>
+                <option value="all">All Accessible</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="inbox-app">
+        <inbox-table :initial-unread-count="{{ unreadCount }}"></inbox-table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Initialize Mercure connection for real-time updates
+        const tenantId = {{ app.user.tenant.id }};
+        const mercureUrl = '{{ mercure_url }}';
+
+        if (typeof EventSource !== 'undefined') {
+            const eventSource = new EventSource(mercureUrl + '?topic=https://qbilhub.com/inbox/' + tenantId);
+
+            eventSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                window.dispatchEvent(new CustomEvent('mercure-update', { detail: data }));
+            };
+        }
+    </script>
+{% endblock %}

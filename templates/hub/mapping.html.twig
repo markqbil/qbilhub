@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Document Mapping - Qbil Hub{% endblock %}
+
+{% block body %}
+<div class="mapping-container">
+    <div class="mapping-header">
+        <h2>Document Mapping</h2>
+        <a href="{{ path('hub_inbox_index') }}" class="btn-back">← Back to Inbox</a>
+    </div>
+
+    <div id="mapping-app">
+        <split-view-mapping :document-id="{{ document.id }}"></split-view-mapping>
+    </div>
+</div>
+{% endblock %}

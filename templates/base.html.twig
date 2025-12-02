@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Qbil Hub{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="/build/app.css">
+    {% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Qbil Hub</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li>
+                        <a href="{{ path('hub_inbox_index') }}" id="hub-inbox-link">
+                            Hub Inbox
+                            <span id="inbox-badge" class="badge hidden">0</span>
+                        </a>
+                    </li>
+                    <li><a href="/contracts">Contracts</a></li>
+                    <li><a href="/settings">Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            {% block body %}{% endblock %}
+        </main>
+    </div>
+
+    {% block javascripts %}
+        <script src="/build/app.js"></script>
+    {% endblock %}
+</body>
+</html>
