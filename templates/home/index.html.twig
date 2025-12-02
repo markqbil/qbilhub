@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QbilHub - B2B Document Exchange Platform{% endblock %}
+
+{% block body %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+
+    {# Hero Section #}
+    <div style="text-align: center; padding: 60px 0 40px;">
+        <h1 style="font-size: 3em; margin: 0 0 20px; color: #2c3e50;">
+            🚀 Welcome to QbilHub
+        </h1>
+        <p style="font-size: 1.5em; color: #7f8c8d; margin: 0 0 40px;">
+            B2B Document Exchange & Intelligent Mapping Platform
+        </p>
+        <p style="font-size: 1.1em; color: #95a5a6; max-width: 800px; margin: 0 auto 30px;">
+            Built with Symfony 6.4 + Python FastAPI + PostgreSQL + Vue.js 3
+        </p>
+    </div>
+
+    {# Status Cards #}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 40px 0;">
+
+        {# Backend Status #}
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+            <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+            <h3 style="margin: 0 0 10px; font-size: 1.5em;">Symfony Backend</h3>
+            <p style="margin: 0; opacity: 0.9;">Version 6.4.29</p>
+            <p style="margin: 10px 0 0; opacity: 0.9;">Status: <strong>Operational</strong></p>
+        </div>
+
+        {# Database Status #}
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);">
+            <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+            <h3 style="margin: 0 0 10px; font-size: 1.5em;">PostgreSQL Database</h3>
+            <p style="margin: 0; opacity: 0.9;">57 tables created</p>
+            <p style="margin: 10px 0 0; opacity: 0.9;">Status: <strong>Connected</strong></p>
+        </div>
+
+        {# Python Service #}
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);">
+            <div style="font-size: 2em; margin-bottom: 10px;">🤖</div>
+            <h3 style="margin: 0 0 10px; font-size: 1.5em;">AI Intelligence Service</h3>
+            <p style="margin: 0; opacity: 0.9;">Python FastAPI</p>
+            <p style="margin: 10px 0 0; opacity: 0.9;">
+                <a href="http://localhost:8000/docs" target="_blank" style="color: white; text-decoration: underline;">
+                    View API Docs →
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    {# Features Section #}
+    <div style="margin: 60px 0;">
+        <h2 style="text-align: center; font-size: 2em; color: #2c3e50; margin-bottom: 40px;">
+            🎯 Available Features
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #667eea;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">📥 Hub Inbox</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Unified inbox for multi-tenant document reception</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #f5576c;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">🗂️ Split-View Mapping</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Side-by-side document viewer with field mapping</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #4facfe;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">🧠 AI Schema Extraction</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Automatic field detection with confidence scores</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #f093fb;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">🔗 Entity Resolution</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Smart product code and supplier matching</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #43e97b;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">📚 Active Learning</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Feedback loop to improve AI accuracy</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #fa709a;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">👥 Delegation System</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Assign documents to processors with rules</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #feca57;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">🏢 Multi-Tenancy</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Secure data isolation per organization</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #a29bfe;">
+                <h4 style="margin: 0 0 10px; color: #2c3e50;">⚡ Real-time Updates</h4>
+                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Live notifications via Server-Sent Events</p>
+            </div>
+
+        </div>
+    </div>
+
+    {# API Endpoints Section #}
+    <div style="margin: 60px 0;">
+        <h2 style="text-align: center; font-size: 2em; color: #2c3e50; margin-bottom: 40px;">
+            🔌 API Endpoints
+        </h2>
+
+        <div style="background: #2c3e50; padding: 30px; border-radius: 12px; color: white;">
+            <div style="margin-bottom: 20px;">
+                <h4 style="margin: 0 0 15px; color: #fff;">Symfony REST API:</h4>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /api</code> - API Documentation</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /hub/inbox/documents</code> - List documents</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /hub/inbox/upload</code> - Upload document</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /mapping/{id}</code> - View mapping interface</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h4 style="margin: 0 0 15px; color: #fff;">Python Intelligence API:</h4>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/extract-schema</code> - Extract document fields</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/resolve-entities</code> - Match product codes</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/active-learning/feedback</code> - Submit corrections</li>
+                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /health</code> - Service health check</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {# Quick Links #}
+    <div style="text-align: center; margin: 60px 0 40px;">
+        <h2 style="font-size: 2em; color: #2c3e50; margin-bottom: 30px;">
+            🔗 Quick Links
+        </h2>
+
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="http://localhost:8000/docs" target="_blank"
+               style="background: #667eea; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s;">
+                📚 Python API Docs
+            </a>
+
+            <a href="/api"
+               style="background: #f5576c; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3); transition: all 0.3s;">
+                🔌 Symfony API
+            </a>
+
+            <a href="/_profiler"
+               style="background: #4facfe; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); transition: all 0.3s;">
+                🛠️ Profiler (Dev)
+            </a>
+
+            <a href="https://github.com/markqbil/qbilhub" target="_blank"
+               style="background: #2c3e50; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3); transition: all 0.3s;">
+                🌟 GitHub Repository
+            </a>
+        </div>
+    </div>
+
+    {# Tech Stack #}
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 12px; color: white; text-align: center; margin: 40px 0;">
+        <h3 style="margin: 0 0 20px; font-size: 1.8em;">🛠️ Technology Stack</h3>
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; font-size: 1.1em;">
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Symfony 6.4</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">PHP 8.5</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Python FastAPI</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">PostgreSQL 18</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Vue.js 3</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Doctrine ORM</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">API Platform</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Mercure (SSE)</span>
+        </div>
+    </div>
+
+    {# Footer #}
+    <div style="text-align: center; padding: 40px 0; color: #95a5a6;">
+        <p style="margin: 0;">
+            <strong>QbilHub</strong> - Intelligent B2B Document Exchange Platform
+        </p>
+        <p style="margin: 10px 0 0; font-size: 0.9em;">
+            Built with ❤️ for efficient contract processing
+        </p>
+    </div>
+
+</div>
+{% endblock %}

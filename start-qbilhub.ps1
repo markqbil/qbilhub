@@ -97,9 +97,9 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$pythonPath';
 # Wait a moment
 Start-Sleep -Seconds 2
 
-# Optionally start message worker
-Write-Host "`n3. Starting Message Queue Worker (optional)..." -ForegroundColor Cyan
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$pythonPath'; php bin/console messenger:consume async -vv"
+# Message worker not needed (using sync transport)
+Write-Host "`n3. Message Queue: Using synchronous processing (no worker needed)" -ForegroundColor Cyan
+Write-Host "   Messages will be processed immediately" -ForegroundColor Gray
 
 Write-Host "`n========================================" -ForegroundColor Green
 Write-Host "   QbilHub Services Started!" -ForegroundColor Green
@@ -114,5 +114,5 @@ Write-Host "  • API Documentation:  http://localhost:8000/docs" -ForegroundCol
 Write-Host "`nTo stop services:" -ForegroundColor Gray
 Write-Host "  Close the PowerShell windows or press Ctrl+C in each window" -ForegroundColor Gray
 
-Write-Host "`nNote: 3 new PowerShell windows have been opened." -ForegroundColor Cyan
+Write-Host "`nNote: 2 new PowerShell windows have been opened." -ForegroundColor Cyan
 Write-Host "      Keep them running for the services to work.`n" -ForegroundColor Cyan

@@ -44,3 +44,10 @@ cacert.pem
 
 # Setup scripts (local only)
 setup_db.sql
+
+# Temporary troubleshooting files
+*-fix*.ps1
+*-fix*.md
+enable-*.ps1
+CURRENT_STATUS.md
+WINDOWS_SSL_FIX.md

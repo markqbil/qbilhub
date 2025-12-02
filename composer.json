@@ -15,6 +15,7 @@
         "doctrine/orm": "^2.17",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
+        "symfony/doctrine-messenger": "6.4.*",
         "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.4.*",
@@ -42,7 +43,8 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "cafile": "cacert.pem"
     },
     "autoload": {
         "psr-4": {

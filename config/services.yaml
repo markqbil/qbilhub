@@ -5,6 +5,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $pythonServiceUrl: '%python_service_url%'
 
     App\:
         resource: '../src/'

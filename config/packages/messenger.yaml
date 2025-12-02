@@ -1,24 +1,13 @@
 framework:
     messenger:
-        failure_transport: failed
-
+        # Simplified config - using sync transport for now
+        # To enable async: install symfony/doctrine-messenger and configure DSN
         transports:
-            # Use Redis or RabbitMQ for production
-            async:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                options:
-                    use_notify: true
-                    check_delayed_interval: 60000
-                retry_strategy:
-                    max_retries: 3
-                    multiplier: 2
-                    delay: 1000
-                    max_delay: 0
-
-            failed: 'doctrine://default?queue_name=failed'
+            sync: 'sync://'
 
         routing:
-            'App\Message\ProcessDocumentMessage': async
-            'App\Message\SchemaExtractionMessage': async
-            'App\Message\EntityResolutionMessage': async
-            'App\Message\ActiveLearningFeedbackMessage': async
+            # Process synchronously for now
+            'App\Message\ProcessDocumentMessage': sync
+            'App\Message\SchemaExtractionMessage': sync
+            'App\Message\EntityResolutionMessage': sync
+            'App\Message\ActiveLearningFeedbackMessage': sync

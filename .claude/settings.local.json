@@ -8,7 +8,20 @@
       "Bash(cmd.exe /c \"cd C:\\Users\\MarkEllis\\Documents\\QbilHub && composer config --global disable-tls true && composer config --global secure-http false && composer install --no-interaction --prefer-dist 2>&1 | head -50\")",
       "Bash(test:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(composer config:*)",
+      "Bash(composer install:*)",
+      "Bash(composer dump-autoload:*)",
+      "Bash(php:*)",
+      "Bash(findstr:*)",
+      "Bash(composer require:*)",
+      "Bash(Select-String -Pattern \"home|/\")",
+      "Bash(Select-Object -First 5)"
     ],
     "deny": [],
     "ask": []
