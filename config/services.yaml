@@ -1,5 +1,7 @@
 parameters:
     python_service_url: '%env(PYTHON_SERVICE_URL)%'
+    qbil_trade_api_token: '%env(QBIL_TRADE_API_TOKEN)%'
+    qbil_trade_enable_rate_limiting: '%env(bool:QBIL_TRADE_ENABLE_RATE_LIMITING)%'
 
 services:
     _defaults:
@@ -7,6 +9,8 @@ services:
         autoconfigure: true
         bind:
             $pythonServiceUrl: '%python_service_url%'
+            $apiToken: '%qbil_trade_api_token%'
+            $enableRateLimiting: '%qbil_trade_enable_rate_limiting%'
 
     App\:
         resource: '../src/'

@@ -49,8 +49,14 @@ class ReceivedDocument
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $documentUrl = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
+    private ?string $externalId = null;
+
     #[ORM\Column(type: 'jsonb')]
     private array $rawData = [];
+
+    #[ORM\Column(type: 'jsonb', nullable: true)]
+    private ?array $metadata = null;
 
     #[ORM\Column(type: 'jsonb', nullable: true)]
     private ?array $extractedSchema = null;
@@ -265,5 +271,29 @@ class ReceivedDocument
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(?string $externalId): self
+    {
+        $this->externalId = $externalId;
+        $this->updatedAt = new \DateTimeImmutable();
+        return $this;
+    }
+
+    public function getMetadata(): ?array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(?array $metadata): self
+    {
+        $this->metadata = $metadata;
+        $this->updatedAt = new \DateTimeImmutable();
+        return $this;
     }
 }
