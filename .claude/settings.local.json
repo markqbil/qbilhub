@@ -21,7 +21,8 @@
       "Bash(findstr:*)",
       "Bash(composer require:*)",
       "Bash(Select-String -Pattern \"home|/\")",
-      "Bash(Select-Object -First 5)"
+      "Bash(Select-Object -First 5)",
+      "Bash(Select-String:*)"
     ],
     "deny": [],
     "ask": []

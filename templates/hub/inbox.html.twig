@@ -49,7 +49,7 @@
                         </td>
                         <td style="padding: 15px; color: #7f8c8d;">{{ document.receivedAt|date('M d, Y') }}</td>
                         <td style="padding: 15px; text-align: right;">
-                            <a href="/mapping/{{ document.id }}" style="background: #667eea; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
+                            <a href="{{ path('hub_mapping_view', {'id': document.id}) }}" style="background: #667eea; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
                                 View →
                             </a>
                         </td>

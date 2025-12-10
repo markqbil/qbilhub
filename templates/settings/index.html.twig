@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings - QbilHub{% endblock %}
+
+{% block body %}
+<div style="min-height: 100vh; background: #f5f7fa;">
+    {# Header #}
+    <div style="background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px 0; margin-bottom: 30px;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin: 0; font-size: 28px; color: #2c3e50;">⚙️ Settings</h1>
+            <a href="{{ path('app_home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
+        </div>
+    </div>
+
+    {# Main Content #}
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+
+        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 40px;">
+            <h2 style="margin: 0 0 30px; color: #2c3e50;">Application Settings</h2>
+
+            <div style="display: grid; gap: 30px;">
+                {# General Settings #}
+                <div style="border-bottom: 1px solid #eee; padding-bottom: 30px;">
+                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">General</h3>
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Application Name</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">QbilHub - B2B Document Exchange</div>
+                            </div>
+                            <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Edit</button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Environment</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">Development</div>
+                            </div>
+                            <span style="background: #f39c12; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">DEV</span>
+                        </div>
+                    </div>
+                </div>
+
+                {# Database Settings #}
+                <div style="border-bottom: 1px solid #eee; padding-bottom: 30px;">
+                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">Database</h3>
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Database Type</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">PostgreSQL 18</div>
+                            </div>
+                            <span style="background: #2ecc71; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Connected</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Host</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">127.0.0.1:5432</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Integration Settings #}
+                <div>
+                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">Integrations</h3>
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Python AI Service</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">http://localhost:8000</div>
+                            </div>
+                            <a href="http://localhost:8000/docs" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">View API →</a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Message Queue</div>
+                                <div style="color: #7f8c8d; font-size: 14px;">Synchronous Processing</div>
+                            </div>
+                            <span style="background: #3498db; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
