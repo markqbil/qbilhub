@@ -3,86 +3,110 @@
 {% block title %}Settings - QbilHub{% endblock %}
 
 {% block body %}
-<div style="min-height: 100vh; background: #f5f7fa;">
-    {# Header #}
-    <div style="background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px 0; margin-bottom: 30px;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin: 0; font-size: 28px; color: #2c3e50;">⚙️ Settings</h1>
-            <a href="{{ path('app_home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
-        </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# Page Header #}
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
+        <p class="text-gray-600">Manage your application configuration and integrations</p>
     </div>
 
-    {# Main Content #}
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-
-        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 40px;">
-            <h2 style="margin: 0 0 30px; color: #2c3e50;">Application Settings</h2>
-
-            <div style="display: grid; gap: 30px;">
-                {# General Settings #}
-                <div style="border-bottom: 1px solid #eee; padding-bottom: 30px;">
-                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">General</h3>
-                    <div style="display: grid; gap: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Application Name</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">QbilHub - B2B Document Exchange</div>
-                            </div>
-                            <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Edit</button>
+    {# Settings Content #}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-8">
+            {# General Settings #}
+            <div class="mb-10 pb-10 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    General
+                </h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Application Name</div>
+                            <div class="text-sm text-gray-600">QbilHub - B2B Document Exchange</div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Environment</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">Development</div>
-                            </div>
-                            <span style="background: #f39c12; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">DEV</span>
+                        <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-150">
+                            Edit
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Environment</div>
+                            <div class="text-sm text-gray-600">Development</div>
                         </div>
+                        <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">DEV</span>
                     </div>
                 </div>
+            </div>
 
-                {# Database Settings #}
-                <div style="border-bottom: 1px solid #eee; padding-bottom: 30px;">
-                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">Database</h3>
-                    <div style="display: grid; gap: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Database Type</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">PostgreSQL 18</div>
-                            </div>
-                            <span style="background: #2ecc71; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Connected</span>
+            {# Database Settings #}
+            <div class="mb-10 pb-10 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                    </svg>
+                    Database
+                </h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Database Type</div>
+                            <div class="text-sm text-gray-600">PostgreSQL 18</div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Host</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">127.0.0.1:5432</div>
-                            </div>
-                        </div>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Connected
+                        </span>
                     </div>
-                </div>
-
-                {# Integration Settings #}
-                <div>
-                    <h3 style="margin: 0 0 20px; color: #2c3e50; font-size: 20px;">Integrations</h3>
-                    <div style="display: grid; gap: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Python AI Service</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">http://localhost:8000</div>
-                            </div>
-                            <a href="http://localhost:8000/docs" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">View API →</a>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600; margin-bottom: 5px;">Message Queue</div>
-                                <div style="color: #7f8c8d; font-size: 14px;">Synchronous Processing</div>
-                            </div>
-                            <span style="background: #3498db; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Active</span>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Host</div>
+                            <div class="text-sm text-gray-600">127.0.0.1:5432</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+            {# Integration Settings #}
+            <div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                    Integrations
+                </h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Python AI Service</div>
+                            <div class="text-sm text-gray-600">http://localhost:8000</div>
+                        </div>
+                        <a href="http://localhost:8000/docs" target="_blank"
+                           class="inline-flex items-center px-4 py-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-150">
+                            View API
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900 mb-1">Message Queue</div>
+                            <div class="text-sm text-gray-600">Synchronous Processing</div>
+                        </div>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full flex items-center">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                            Active
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

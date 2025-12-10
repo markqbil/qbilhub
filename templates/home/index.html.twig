@@ -3,191 +3,203 @@
 {% block title %}QbilHub - B2B Document Exchange Platform{% endblock %}
 
 {% block body %}
-<div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
     {# Hero Section #}
-    <div style="text-align: center; padding: 60px 0 40px;">
-        <h1 style="font-size: 3em; margin: 0 0 20px; color: #2c3e50;">
-            🚀 Welcome to QbilHub
+    <div class="text-center py-16 px-4">
+        <div class="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-6">
+            <span class="px-4 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full">v1.0</span>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+            Welcome to <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">QbilHub</span>
         </h1>
-        <p style="font-size: 1.5em; color: #7f8c8d; margin: 0 0 40px;">
+        <p class="text-2xl md:text-3xl text-gray-600 mb-8 font-light">
             B2B Document Exchange & Intelligent Mapping Platform
         </p>
-        <p style="font-size: 1.1em; color: #95a5a6; max-width: 800px; margin: 0 auto 30px;">
+        <p class="text-lg text-gray-500 max-w-3xl mx-auto mb-12">
             Built with Symfony 6.4 + Python FastAPI + PostgreSQL + Vue.js 3
         </p>
+
+        {# CTA Button #}
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ path('hub_inbox_index') }}" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                </svg>
+                Open Hub Inbox
+            </a>
+            <a href="http://localhost:8000/docs" target="_blank" class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-700 font-semibold rounded-lg shadow-md hover:shadow-lg border-2 border-gray-200 hover:border-blue-300 transform hover:-translate-y-0.5 transition-all duration-200">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                View API Docs
+            </a>
+        </div>
     </div>
 
     {# Status Cards #}
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 40px 0;">
-
+    <div class="grid md:grid-cols-3 gap-6 mb-16">
         {# Backend Status #}
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
-            <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-            <h3 style="margin: 0 0 10px; font-size: 1.5em;">Symfony Backend</h3>
-            <p style="margin: 0; opacity: 0.9;">Version 6.4.29</p>
-            <p style="margin: 10px 0 0; opacity: 0.9;">Status: <strong>Operational</strong></p>
+        <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-8 shadow-xl text-white transform hover:scale-105 transition-transform duration-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <span class="bg-green-400 text-green-900 text-xs font-bold px-3 py-1 rounded-full">Operational</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Symfony Backend</h3>
+            <p class="opacity-90 mb-1">Version 6.4.29</p>
+            <p class="text-sm opacity-75">PHP 8.5.0</p>
         </div>
 
         {# Database Status #}
-        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);">
-            <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-            <h3 style="margin: 0 0 10px; font-size: 1.5em;">PostgreSQL Database</h3>
-            <p style="margin: 0; opacity: 0.9;">57 tables created</p>
-            <p style="margin: 10px 0 0; opacity: 0.9;">Status: <strong>Connected</strong></p>
+        <div class="bg-gradient-to-br from-pink-500 to-red-500 rounded-xl p-8 shadow-xl text-white transform hover:scale-105 transition-transform duration-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                    </svg>
+                </div>
+                <span class="bg-green-400 text-green-900 text-xs font-bold px-3 py-1 rounded-full">Connected</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">PostgreSQL Database</h3>
+            <p class="opacity-90 mb-1">57 tables created</p>
+            <p class="text-sm opacity-75">PostgreSQL 18</p>
         </div>
 
         {# Python Service #}
-        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 30px; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);">
-            <div style="font-size: 2em; margin-bottom: 10px;">🤖</div>
-            <h3 style="margin: 0 0 10px; font-size: 1.5em;">AI Intelligence Service</h3>
-            <p style="margin: 0; opacity: 0.9;">Python FastAPI</p>
-            <p style="margin: 10px 0 0; opacity: 0.9;">
-                <a href="http://localhost:8000/docs" target="_blank" style="color: white; text-decoration: underline;">
-                    View API Docs →
-                </a>
-            </p>
+        <div class="bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl p-8 shadow-xl text-white transform hover:scale-105 transition-transform duration-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <span class="bg-green-400 text-green-900 text-xs font-bold px-3 py-1 rounded-full">Active</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">AI Intelligence Service</h3>
+            <p class="opacity-90 mb-1">Python FastAPI</p>
+            <a href="http://localhost:8000/docs" target="_blank" class="inline-flex items-center text-sm font-semibold hover:underline mt-2">
+                View API Docs
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+            </a>
         </div>
-
     </div>
 
     {# Features Section #}
-    <div style="margin: 60px 0;">
-        <h2 style="text-align: center; font-size: 2em; color: #2c3e50; margin-bottom: 40px;">
-            🎯 Available Features
-        </h2>
+    <div class="mb-20">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Available Features</h2>
+            <p class="text-lg text-gray-600">Powerful capabilities for B2B document processing</p>
+        </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #667eea;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">📥 Hub Inbox</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Unified inbox for multi-tenant document reception</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-blue-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Hub Inbox</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Unified inbox for multi-tenant document reception</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #f5576c;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">🗂️ Split-View Mapping</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Side-by-side document viewer with field mapping</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-red-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Split-View Mapping</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Side-by-side document viewer with field mapping</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #4facfe;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">🧠 AI Schema Extraction</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Automatic field detection with confidence scores</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-cyan-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-cyan-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">AI Schema Extraction</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Automatic field detection with confidence scores</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #f093fb;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">🔗 Entity Resolution</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Smart product code and supplier matching</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-purple-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Entity Resolution</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Smart product code and supplier matching</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #43e97b;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">📚 Active Learning</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Feedback loop to improve AI accuracy</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-green-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Active Learning</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Feedback loop to improve AI accuracy</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #fa709a;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">👥 Delegation System</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Assign documents to processors with rules</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-pink-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-pink-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Delegation System</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Assign documents to processors with rules</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #feca57;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">🏢 Multi-Tenancy</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Secure data isolation per organization</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-yellow-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Multi-Tenancy</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Secure data isolation per organization</p>
             </div>
 
-            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; border-left: 4px solid #a29bfe;">
-                <h4 style="margin: 0 0 10px; color: #2c3e50;">⚡ Real-time Updates</h4>
-                <p style="margin: 0; color: #7f8c8d; font-size: 0.95em;">Live notifications via Server-Sent Events</p>
+            <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-200 border-l-4 border-indigo-500">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <h4 class="font-semibold text-gray-900">Real-time Updates</h4>
+                </div>
+                <p class="text-gray-600 text-sm">Live notifications via Server-Sent Events</p>
             </div>
-
         </div>
     </div>
 
-    {# API Endpoints Section #}
-    <div style="margin: 60px 0;">
-        <h2 style="text-align: center; font-size: 2em; color: #2c3e50; margin-bottom: 40px;">
-            🔌 API Endpoints
-        </h2>
-
-        <div style="background: #2c3e50; padding: 30px; border-radius: 12px; color: white;">
-            <div style="margin-bottom: 20px;">
-                <h4 style="margin: 0 0 15px; color: #fff;">Symfony REST API:</h4>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /api</code> - API Documentation</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /hub/inbox/documents</code> - List documents</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /hub/inbox/upload</code> - Upload document</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /mapping/{id}</code> - View mapping interface</li>
-                </ul>
-            </div>
-
-            <div style="margin-top: 30px;">
-                <h4 style="margin: 0 0 15px; color: #fff;">Python Intelligence API:</h4>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/extract-schema</code> - Extract document fields</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/resolve-entities</code> - Match product codes</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">POST /api/active-learning/feedback</code> - Submit corrections</li>
-                    <li style="padding: 8px 0;"><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">GET /health</code> - Service health check</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    {# Quick Links #}
-    <div style="text-align: center; margin: 60px 0 40px;">
-        <h2 style="font-size: 2em; color: #2c3e50; margin-bottom: 30px;">
-            🔗 Quick Links
-        </h2>
-
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            <a href="{{ path('hub_inbox_index') }}"
-               style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4); transition: all 0.3s; font-size: 16px;">
-                📥 Open Hub Inbox
-            </a>
-
-            <a href="http://localhost:8000/docs" target="_blank"
-               style="background: #667eea; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s;">
-                📚 Python API Docs
-            </a>
-
-            <a href="/api"
-               style="background: #f5576c; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3); transition: all 0.3s;">
-                🔌 Symfony API
-            </a>
-
-            <a href="/_profiler"
-               style="background: #4facfe; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); transition: all 0.3s;">
-                🛠️ Profiler (Dev)
-            </a>
-
-            <a href="https://github.com/markqbil/qbilhub" target="_blank"
-               style="background: #2c3e50; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3); transition: all 0.3s;">
-                🌟 GitHub Repository
-            </a>
-        </div>
-    </div>
-
-    {# Tech Stack #}
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 12px; color: white; text-align: center; margin: 40px 0;">
-        <h3 style="margin: 0 0 20px; font-size: 1.8em;">🛠️ Technology Stack</h3>
-        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; font-size: 1.1em;">
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Symfony 6.4</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">PHP 8.5</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Python FastAPI</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">PostgreSQL 18</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Vue.js 3</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Doctrine ORM</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">API Platform</span>
-            <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">Mercure (SSE)</span>
+    {# Tech Stack Section #}
+    <div class="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-12 text-white text-center mb-16">
+        <h3 class="text-3xl font-bold mb-8">Technology Stack</h3>
+        <div class="flex flex-wrap gap-4 justify-center text-lg">
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">Symfony 6.4</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">PHP 8.5</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">Python FastAPI</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">PostgreSQL 18</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">Vue.js 3</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">Doctrine ORM</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">API Platform</span>
+            <span class="bg-white bg-opacity-20 px-6 py-3 rounded-full font-semibold backdrop-blur-sm">Mercure SSE</span>
         </div>
     </div>
 
     {# Footer #}
-    <div style="text-align: center; padding: 40px 0; color: #95a5a6;">
-        <p style="margin: 0;">
-            <strong>QbilHub</strong> - Intelligent B2B Document Exchange Platform
-        </p>
-        <p style="margin: 10px 0 0; font-size: 0.9em;">
-            Built with ❤️ for efficient contract processing
-        </p>
+    <div class="text-center py-12 border-t border-gray-200">
+        <p class="text-gray-700 font-semibold text-lg mb-2">QbilHub</p>
+        <p class="text-gray-500">Intelligent B2B Document Exchange Platform</p>
+        <p class="text-gray-400 text-sm mt-4">Built for efficient contract processing</p>
     </div>
 
 </div>

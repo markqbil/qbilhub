@@ -3,64 +3,123 @@
 {% block title %}Contracts - QbilHub{% endblock %}
 
 {% block body %}
-<div style="min-height: 100vh; background: #f5f7fa;">
-    {# Header #}
-    <div style="background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px 0; margin-bottom: 30px;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin: 0; font-size: 28px; color: #2c3e50;">📄 Contracts</h1>
-            <a href="{{ path('app_home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {# Page Header #}
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Contracts</h1>
+        <p class="text-gray-600">View and manage contract documents</p>
+    </div>
+
+    {# Summary Stats #}
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100 text-sm mb-1">Total Contracts</p>
+                    <p class="text-4xl font-bold">{{ contracts|length }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm mb-1">Processed</p>
+                    <p class="text-4xl font-bold">{{ contracts|filter(c => c.status == 'mapped')|length }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-md p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-yellow-100 text-sm mb-1">Pending</p>
+                    <p class="text-4xl font-bold">{{ contracts|filter(c => c.status == 'new')|length }}</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
-    {# Main Content #}
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-
-        {# Contracts Table #}
-        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: #f8f9fa;">
-                        <th style="padding: 15px; text-align: left;">Contract #</th>
-                        <th style="padding: 15px; text-align: left;">Supplier</th>
-                        <th style="padding: 15px; text-align: left;">Product</th>
-                        <th style="padding: 15px; text-align: left;">Value</th>
-                        <th style="padding: 15px; text-align: left;">Status</th>
-                        <th style="padding: 15px; text-align: right;">Actions</th>
+    {# Contracts Table #}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contract #</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                     {% for contract in contracts %}
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 15px; font-weight: 600;">
-                            {{ contract.rawData.contract_no ?? contract.rawData.po_number ?? 'N/A' }}
+                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-semibold text-gray-900">
+                                {{ contract.rawData.contract_no ?? contract.rawData.po_number ?? 'N/A' }}
+                            </div>
                         </td>
-                        <td style="padding: 15px;">
-                            {{ contract.rawData.supplier ?? contract.rawData.supplier_name ?? contract.sourceTenant.name }}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">
+                                {{ contract.rawData.supplier ?? contract.rawData.supplier_name ?? contract.sourceTenant.name }}
+                            </div>
                         </td>
-                        <td style="padding: 15px; color: #7f8c8d;">
-                            {{ contract.rawData.product ?? contract.rawData.product_code ?? 'N/A' }}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-600">
+                                {{ contract.rawData.product ?? contract.rawData.product_code ?? 'N/A' }}
+                            </div>
                         </td>
-                        <td style="padding: 15px; color: #2ecc71; font-weight: 600;">
-                            {{ contract.rawData.contract_value ?? contract.rawData.price ?? 'N/A' }}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-semibold text-green-600">
+                                {{ contract.rawData.contract_value ?? contract.rawData.price ?? 'N/A' }}
+                            </div>
                         </td>
-                        <td style="padding: 15px;">
-                            <span style="background: {% if contract.status == 'new' %}#3498db{% elseif contract.status == 'mapped' %}#2ecc71{% else %}#95a5a6{% endif %}; color: white; padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full
+                                {% if contract.status == 'new' %}bg-blue-100 text-blue-800
+                                {% elseif contract.status == 'mapped' %}bg-green-100 text-green-800
+                                {% else %}bg-gray-100 text-gray-800
+                                {% endif %}">
                                 {{ contract.status|upper }}
                             </span>
                         </td>
-                        <td style="padding: 15px; text-align: right;">
-                            <a href="{{ path('hub_mapping_view', {'id': contract.id}) }}" style="background: #667eea; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
-                                View →
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ path('hub_mapping_view', {'id': contract.id}) }}"
+                               class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-150">
+                                View
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
                             </a>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" style="padding: 60px; text-align: center; color: #7f8c8d;">
-                            <div style="font-size: 48px;">📄</div>
-                            <div style="margin-top: 20px; font-size: 18px;">No contracts found</div>
-                            <div style="margin-top: 10px; font-size: 14px; color: #bdc3c7;">
-                                Contract documents will appear here
+                        <td colspan="6" class="px-6 py-16 text-center">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <p class="text-xl font-medium text-gray-600 mb-2">No contracts found</p>
+                                <p class="text-gray-500">Contract documents will appear here</p>
                             </div>
                         </td>
                     </tr>
@@ -68,26 +127,6 @@
                 </tbody>
             </table>
         </div>
-
-        {# Summary Card #}
-        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 30px; margin-top: 20px;">
-            <h3 style="margin: 0 0 20px; color: #2c3e50;">Summary</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                <div>
-                    <div style="font-size: 32px; font-weight: 700; color: #667eea;">{{ contracts|length }}</div>
-                    <div style="color: #7f8c8d; font-weight: 600;">Total Contracts</div>
-                </div>
-                <div>
-                    <div style="font-size: 32px; font-weight: 700; color: #2ecc71;">{{ contracts|filter(c => c.status == 'mapped')|length }}</div>
-                    <div style="color: #7f8c8d; font-weight: 600;">Processed</div>
-                </div>
-                <div>
-                    <div style="font-size: 32px; font-weight: 700; color: #3498db;">{{ contracts|filter(c => c.status == 'new')|length }}</div>
-                    <div style="color: #7f8c8d; font-weight: 600;">Pending</div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 {% endblock %}
