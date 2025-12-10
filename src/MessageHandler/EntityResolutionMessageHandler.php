@@ -6,12 +6,13 @@ namespace App\MessageHandler;
 
 use App\Message\EntityResolutionMessage;
 use App\Repository\ReceivedDocumentRepository;
+use App\Service\NotificationService;
 use App\Service\PythonServiceClient;
+use App\Service\PythonServiceException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\Exception\RecoverableMessageHandlingException;
 
 #[AsMessageHandler]
 class EntityResolutionMessageHandler
@@ -20,7 +21,7 @@ class EntityResolutionMessageHandler
         private readonly ReceivedDocumentRepository $documentRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly PythonServiceClient $pythonClient,
-        private readonly HubInterface $mercureHub,
+        private readonly NotificationService $notificationService,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -33,6 +34,9 @@ class EntityResolutionMessageHandler
             $this->logger->error('Document not found', ['documentId' => $message->getDocumentId()]);
             return;
         }
+
+        // Notify that processing has started
+        $this->notificationService->notifyProcessingStarted($document, 'Resolving entities');
 
         try {
             // Call Python service to resolve entities (product matching)
@@ -47,26 +51,72 @@ class EntityResolutionMessageHandler
             $document->setStatus('mapping');
             $this->entityManager->flush();
 
-            // Publish real-time notification via Mercure
-            $update = new Update(
-                sprintf('https://qbilhub.com/inbox/%d', $document->getTargetTenant()->getId()),
-                json_encode([
-                    'type' => 'document_ready',
-                    'documentId' => $document->getId(),
-                    'status' => 'mapping'
-                ])
-            );
-            $this->mercureHub->publish($update);
+            // Publish real-time notification via NotificationService
+            $this->notificationService->notifyDocumentReady($document);
 
             $this->logger->info('Entity resolution completed', ['documentId' => $document->getId()]);
+
+        } catch (PythonServiceException $e) {
+            $this->handlePythonServiceError($document, $e);
         } catch (\Exception $e) {
-            $this->logger->error('Entity resolution failed', [
+            $this->handleGenericError($document, $e);
+        }
+    }
+
+    private function handlePythonServiceError($document, PythonServiceException $e): void
+    {
+        if ($e->isConnectionError()) {
+            // Service is down - notify user and allow retry
+            $this->logger->warning('Python service unavailable during entity resolution', [
                 'documentId' => $document->getId(),
                 'error' => $e->getMessage()
             ]);
 
-            $document->setStatus('error');
+            $this->notificationService->notifyServiceUnavailable($document, 'Intelligence Service');
+
+            // Mark as queued (not error) so it can be retried
+            $document->setStatus('queued');
             $this->entityManager->flush();
+
+            // Throw recoverable exception for Messenger retry
+            throw new RecoverableMessageHandlingException(
+                'Python service unavailable, will retry',
+                0,
+                $e
+            );
         }
+
+        // Non-connection error - mark as error
+        $this->logger->error('Entity resolution failed', [
+            'documentId' => $document->getId(),
+            'errorType' => $e->getErrorType(),
+            'error' => $e->getMessage()
+        ]);
+
+        $document->setStatus('error');
+        $this->entityManager->flush();
+
+        $this->notificationService->notifyDocumentError(
+            $document,
+            $e->getErrorType(),
+            'Entity resolution failed. Please try again or contact support.'
+        );
+    }
+
+    private function handleGenericError($document, \Exception $e): void
+    {
+        $this->logger->error('Unexpected error during entity resolution', [
+            'documentId' => $document->getId(),
+            'error' => $e->getMessage()
+        ]);
+
+        $document->setStatus('error');
+        $this->entityManager->flush();
+
+        $this->notificationService->notifyDocumentError(
+            $document,
+            'unknown',
+            'An unexpected error occurred. Please try again or contact support.'
+        );
     }
 }

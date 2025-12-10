@@ -1,5 +1,15 @@
 <template>
   <div class="inbox-table-container">
+    <!-- Notification Toast -->
+    <div v-if="notification" :class="['notification-toast', notification.type]">
+      <span class="notification-icon">{{ notification.icon }}</span>
+      <div class="notification-content">
+        <strong>{{ notification.title }}</strong>
+        <p>{{ notification.message }}</p>
+      </div>
+      <button class="notification-close" @click="notification = null">&times;</button>
+    </div>
+
     <div v-if="loading" class="loading">Loading documents...</div>
 
     <div v-else-if="documents.length === 0" class="empty-state">
@@ -21,7 +31,7 @@
         <tr
           v-for="doc in documents"
           :key="doc.id"
-          :class="{ 'unread': !doc.isRead }"
+          :class="{ 'unread': !doc.isRead, 'has-error': doc.status === 'error' }"
         >
           <td>
             <span :class="['status-badge', `status-${doc.status}`]">
@@ -61,6 +71,20 @@
               >
                 Process
               </a>
+              <button
+                v-if="doc.status === 'error'"
+                class="btn-retry"
+                @click="retryDocument(doc.id)"
+              >
+                Retry
+              </button>
+              <span
+                v-if="doc.status === 'queued'"
+                class="status-queued-info"
+                title="Document is queued for processing"
+              >
+                ⏳ Queued
+              </span>
             </div>
           </td>
         </tr>
@@ -84,13 +108,20 @@ export default {
     return {
       documents: [],
       loading: true,
-      filter: 'my'
+      filter: 'my',
+      notification: null,
+      notificationTimeout: null
     };
   },
   mounted() {
     this.loadDocuments();
     this.setupMercureListener();
     this.setupFilterListener();
+  },
+  beforeUnmount() {
+    if (this.notificationTimeout) {
+      clearTimeout(this.notificationTimeout);
+    }
   },
   methods: {
     async loadDocuments() {
@@ -100,6 +131,7 @@ export default {
         this.documents = response.data.documents;
       } catch (error) {
         console.error('Failed to load documents:', error);
+        this.showNotification('error', 'Error', 'Failed to load documents. Please refresh the page.');
       } finally {
         this.loading = false;
       }
@@ -111,10 +143,44 @@ export default {
         console.error('Failed to mark document as read:', error);
       }
     },
+    async retryDocument(documentId) {
+      try {
+        await axios.post(`/hub/inbox/document/${documentId}/retry`);
+        this.showNotification('success', 'Retry Initiated', 'Document has been queued for reprocessing.');
+        this.loadDocuments();
+      } catch (error) {
+        console.error('Failed to retry document:', error);
+        this.showNotification('error', 'Retry Failed', 'Could not retry document. Please try again.');
+      }
+    },
     setupMercureListener() {
       window.addEventListener('mercure-update', (event) => {
-        if (event.detail.type === 'document_ready') {
-          this.loadDocuments();
+        const data = event.detail;
+
+        switch (data.type) {
+          case 'document_ready':
+            this.loadDocuments();
+            this.showNotification('success', 'Document Ready', 'A document is ready for mapping.');
+            break;
+
+          case 'document_error':
+            this.loadDocuments();
+            this.showNotification('error', 'Processing Error', data.errorMessage || 'An error occurred while processing a document.');
+            break;
+
+          case 'service_unavailable':
+            this.showNotification('warning', 'Service Temporarily Unavailable', data.message || 'Your document has been queued and will be processed when the service is restored.');
+            this.loadDocuments();
+            break;
+
+          case 'processing_started':
+            // Update UI to show processing state
+            this.loadDocuments();
+            break;
+
+          case 'processing_delayed':
+            this.showNotification('warning', 'Processing Delayed', data.message || 'Document processing has been delayed.');
+            break;
         }
       });
     },
@@ -127,6 +193,29 @@ export default {
         });
       }
     },
+    showNotification(type, title, message) {
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+
+      this.notification = {
+        type,
+        title,
+        message,
+        icon: icons[type] || 'ℹ'
+      };
+
+      // Auto-dismiss after 5 seconds
+      if (this.notificationTimeout) {
+        clearTimeout(this.notificationTimeout);
+      }
+      this.notificationTimeout = setTimeout(() => {
+        this.notification = null;
+      }, 5000);
+    },
     formatStatus(status) {
       const statusMap = {
         'new': 'New',
@@ -134,7 +223,8 @@ export default {
         'resolving_entities': 'Resolving',
         'mapping': 'Ready for Mapping',
         'processed': 'Processed',
-        'error': 'Error'
+        'error': 'Error',
+        'queued': 'Queued'
       };
       return statusMap[status] || status;
     },
@@ -149,6 +239,93 @@ export default {
 <style scoped>
 .inbox-table-container {
   padding: 20px;
+  position: relative;
+}
+
+/* Notification Toast */
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-toast.success {
+  background: #d4edda;
+  border-left: 4px solid #28a745;
+}
+
+.notification-toast.error {
+  background: #f8d7da;
+  border-left: 4px solid #dc3545;
+}
+
+.notification-toast.warning {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+}
+
+.notification-toast.info {
+  background: #d1ecf1;
+  border-left: 4px solid #17a2b8;
+}
+
+.notification-icon {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.notification-toast.success .notification-icon { color: #28a745; }
+.notification-toast.error .notification-icon { color: #dc3545; }
+.notification-toast.warning .notification-icon { color: #856404; }
+.notification-toast.info .notification-icon { color: #0c5460; }
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.5;
+  padding: 0;
+  line-height: 1;
+}
+
+.notification-close:hover {
+  opacity: 1;
 }
 
 .loading, .empty-state {
@@ -180,6 +357,10 @@ export default {
 .inbox-table tbody tr.unread {
   background: #f0f7ff;
   font-weight: 600;
+}
+
+.inbox-table tbody tr.has-error {
+  background: #fff5f5;
 }
 
 .inbox-table tbody tr:hover {
@@ -214,6 +395,17 @@ export default {
   color: #d63031;
 }
 
+.status-queued {
+  background: #ffeaa7;
+  color: #6c5ce7;
+}
+
+.status-extracting_schema,
+.status-resolving_entities {
+  background: #81ecec;
+  color: #00b894;
+}
+
 .source-cell {
   display: flex;
   align-items: center;
@@ -230,6 +422,7 @@ export default {
 .actions {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .btn-icon {
@@ -250,5 +443,25 @@ export default {
 
 .btn-primary:hover {
   background: #0770c9;
+}
+
+.btn-retry {
+  padding: 6px 12px;
+  background: #fdcb6e;
+  color: #2d3436;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-retry:hover {
+  background: #ffeaa7;
+}
+
+.status-queued-info {
+  font-size: 13px;
+  color: #6c5ce7;
 }
 </style>

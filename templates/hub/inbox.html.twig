@@ -1,39 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hub Inbox - Qbil Hub{% endblock %}
+{% block title %}Hub Inbox - QbilHub{% endblock %}
 
 {% block body %}
-<div class="hub-inbox-container">
-    <div class="inbox-header">
-        <h2>Hub Inbox</h2>
-        <div class="inbox-controls">
-            <select id="inbox-filter" class="filter-dropdown">
-                <option value="my">My Inbox</option>
-                <option value="all">All Accessible</option>
-            </select>
+<div style="min-height: 100vh; background: #f5f7fa;">
+    {# Header #}
+    <div style="background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px 0; margin-bottom: 30px;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin: 0; font-size: 28px; color: #2c3e50;">📥 Hub Inbox</h1>
+            <a href="{{ path('app_home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Home</a>
         </div>
     </div>
 
-    <div id="inbox-app">
-        <inbox-table :initial-unread-count="{{ unreadCount }}"></inbox-table>
+    {# Main Content #}
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+
+        {# Documents Table #}
+        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding: 15px; text-align: left;">Status</th>
+                        <th style="padding: 15px; text-align: left;">Type</th>
+                        <th style="padding: 15px; text-align: left;">From</th>
+                        <th style="padding: 15px; text-align: left;">Details</th>
+                        <th style="padding: 15px; text-align: left;">Received</th>
+                        <th style="padding: 15px; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 15px;">
+                            <span style="background: {% if document.status == 'new' %}#3498db{% elseif document.status == 'processing' %}#f39c12{% elseif document.status == 'mapped' %}#2ecc71{% elseif document.status == 'delegated' %}#9b59b6{% else %}#95a5a6{% endif %}; color: white; padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                {{ document.status|upper }}
+                            </span>
+                        </td>
+                        <td style="padding: 15px; font-weight: 600;">{{ document.documentType }}</td>
+                        <td style="padding: 15px;">
+                            <div>{{ document.sourceTenant.name }}</div>
+                            <div style="font-size: 12px; color: #7f8c8d;">{{ document.sourceTenant.tenantCode }}</div>
+                        </td>
+                        <td style="padding: 15px; color: #7f8c8d;">
+                            {% if document.rawData|length > 0 %}
+                                {% set firstKey = document.rawData|keys|first %}
+                                <strong>{{ firstKey|replace({'_': ' '})|title }}:</strong> {{ document.rawData[firstKey] }}
+                            {% endif %}
+                        </td>
+                        <td style="padding: 15px; color: #7f8c8d;">{{ document.receivedAt|date('M d, Y') }}</td>
+                        <td style="padding: 15px; text-align: right;">
+                            <a href="/mapping/{{ document.id }}" style="background: #667eea; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
+                                View →
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="padding: 60px; text-align: center; color: #7f8c8d;">
+                            <div style="font-size: 48px;">📭</div>
+                            <div style="margin-top: 20px; font-size: 18px;">No documents yet</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        // Initialize Mercure connection for real-time updates
-        const tenantId = {{ app.user.tenant.id }};
-        const mercureUrl = '{{ mercure_url }}';
-
-        if (typeof EventSource !== 'undefined') {
-            const eventSource = new EventSource(mercureUrl + '?topic=https://qbilhub.com/inbox/' + tenantId);
-
-            eventSource.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                window.dispatchEvent(new CustomEvent('mercure-update', { detail: data }));
-            };
-        }
-    </script>
 {% endblock %}

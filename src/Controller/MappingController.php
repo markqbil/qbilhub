@@ -9,6 +9,7 @@ use App\Entity\ReceivedDocument;
 use App\Message\ActiveLearningFeedbackMessage;
 use App\Repository\PurchaseContractRepository;
 use App\Repository\ReceivedDocumentRepository;
+use App\Service\AuditService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +27,8 @@ class MappingController extends AbstractController
         private readonly ReceivedDocumentRepository $documentRepository,
         private readonly PurchaseContractRepository $contractRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly MessageBusInterface $messageBus
+        private readonly MessageBusInterface $messageBus,
+        private readonly AuditService $auditService
     ) {
     }
 
@@ -39,6 +41,9 @@ class MappingController extends AbstractController
         if ($document->getTargetTenant()->getId() !== $user->getTenant()->getId()) {
             throw $this->createAccessDeniedException('Access denied');
         }
+
+        // Log document view
+        $this->auditService->logDocumentView($document->getId());
 
         return $this->render('hub/mapping.html.twig', [
             'document' => $document,
@@ -116,6 +121,14 @@ class MappingController extends AbstractController
         }
 
         $this->entityManager->flush();
+
+        // Log the document processing
+        $this->auditService->logDocumentProcess($document->getId(), [
+            'contractId' => $contract->getId(),
+            'contractNumber' => $contract->getContractNumber(),
+            'supplier' => $contract->getSupplier(),
+            'product' => $contract->getProduct(),
+        ]);
 
         return $this->json([
             'success' => true,

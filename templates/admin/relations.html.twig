@@ -1,0 +1,569 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Relation Mappings - Qbil Hub{% endblock %}
+
+{% block body %}
+<div class="relations-page">
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Relation Mappings</h1>
+            <p>Map your internal relations to external trading partners</p>
+        </div>
+        <div class="header-actions">
+            <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+            <button class="btn btn-primary" onclick="showCreateModal()">+ Add Mapping</button>
+        </div>
+    </div>
+
+    <div id="relations-container">
+        <div class="loading">Loading mappings...</div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div id="mapping-modal" class="modal hidden">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title">Add Relation Mapping</h2>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="mapping-form" onsubmit="saveMapping(event)">
+            <input type="hidden" id="mapping-id">
+
+            <div class="form-group">
+                <label for="internal-relation-id">Internal Relation ID</label>
+                <input type="text" id="internal-relation-id" required
+                    placeholder="Your ERP relation/customer ID">
+                <small>The ID used in your internal systems for this trading partner</small>
+            </div>
+
+            <div class="form-group">
+                <label for="external-tenant-code">External Partner</label>
+                <select id="external-tenant-code" required>
+                    <option value="">Select a partner...</option>
+                </select>
+                <small>The trading partner in the Qbil Hub directory</small>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" id="is-active" checked>
+                    Connection Active
+                </label>
+                <small>Enable document exchange with this partner</small>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" id="default-send-via-hub">
+                    Default to Hub
+                </label>
+                <small>Automatically send documents via Hub instead of email</small>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Mapping</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.relations-page {
+    padding: 20px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.header-content h1 {
+    margin: 0 0 8px 0;
+    color: #2d3748;
+}
+
+.header-content p {
+    margin: 0;
+    color: #718096;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    background: #3182ce;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2c5282;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.relations-table {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.relations-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.relations-table th,
+.relations-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.relations-table th {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.relations-table tr:last-child td {
+    border-bottom: none;
+}
+
+.relations-table tr:hover {
+    background: #f7fafc;
+}
+
+.partner-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.partner-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4a5568;
+}
+
+.partner-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background: #c6f6d5;
+    color: #276749;
+}
+
+.status-badge.inactive {
+    background: #fed7d7;
+    color: #c53030;
+}
+
+.hub-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    background: #bee3f8;
+    color: #2b6cb0;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #2d3748;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #718096;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #2d3748;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #718096;
+    font-size: 13px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #718096;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.empty-state h3 {
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #718096;
+    margin-bottom: 20px;
+}
+</style>
+
+<script>
+let allTenants = [];
+let allMappings = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadTenants();
+    loadMappings();
+});
+
+async function loadTenants() {
+    try {
+        const response = await fetch('{{ path('admin_tenant_directory') }}');
+        allTenants = await response.json();
+        populateTenantSelect();
+    } catch (error) {
+        console.error('Failed to load tenants:', error);
+    }
+}
+
+function populateTenantSelect() {
+    const select = document.getElementById('external-tenant-code');
+    select.innerHTML = '<option value="">Select a partner...</option>';
+
+    allTenants.forEach(tenant => {
+        if (tenant.isHubActive) {
+            const option = document.createElement('option');
+            option.value = tenant.tenantCode;
+            option.textContent = `${tenant.name} (${tenant.tenantCode})`;
+            select.appendChild(option);
+        }
+    });
+}
+
+async function loadMappings() {
+    try {
+        const response = await fetch('{{ path('admin_relations_list') }}');
+        allMappings = await response.json();
+        renderMappings(allMappings);
+    } catch (error) {
+        document.getElementById('relations-container').innerHTML =
+            '<div class="error">Failed to load mappings</div>';
+    }
+}
+
+function renderMappings(mappings) {
+    const container = document.getElementById('relations-container');
+
+    if (mappings.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No relation mappings yet</h3>
+                <p>Map your internal relations to external trading partners to enable document exchange</p>
+                <button class="btn btn-primary" onclick="showCreateModal()">+ Add First Mapping</button>
+            </div>
+        `;
+        return;
+    }
+
+    const html = `
+        <div class="relations-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Internal ID</th>
+                        <th>External Partner</th>
+                        <th>Status</th>
+                        <th>Default</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${mappings.map(mapping => `
+                        <tr>
+                            <td><strong>${mapping.internalRelationId}</strong></td>
+                            <td>
+                                <div class="partner-cell">
+                                    <div class="partner-logo">
+                                        ${mapping.externalTenantLogo
+                                            ? `<img src="${mapping.externalTenantLogo}" alt="">`
+                                            : (mapping.externalTenantName || mapping.externalTenantCode).charAt(0).toUpperCase()
+                                        }
+                                    </div>
+                                    <div>
+                                        <div>${mapping.externalTenantName || mapping.externalTenantCode}</div>
+                                        <small style="color: #718096">${mapping.externalTenantCode}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-badge ${mapping.isActive ? 'active' : 'inactive'}">
+                                    ${mapping.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                ${mapping.defaultSendViaHub ? '<span class="hub-badge">Hub Default</span>' : '-'}
+                            </td>
+                            <td class="actions-cell">
+                                <button class="btn btn-secondary btn-sm" onclick="editMapping(${mapping.id})">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteMapping(${mapping.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    container.innerHTML = html;
+}
+
+function showCreateModal() {
+    document.getElementById('modal-title').textContent = 'Add Relation Mapping';
+    document.getElementById('mapping-id').value = '';
+    document.getElementById('mapping-form').reset();
+    document.getElementById('is-active').checked = true;
+    document.getElementById('mapping-modal').classList.remove('hidden');
+}
+
+function editMapping(id) {
+    const mapping = allMappings.find(m => m.id === id);
+    if (!mapping) return;
+
+    document.getElementById('modal-title').textContent = 'Edit Relation Mapping';
+    document.getElementById('mapping-id').value = id;
+    document.getElementById('internal-relation-id').value = mapping.internalRelationId;
+    document.getElementById('external-tenant-code').value = mapping.externalTenantCode;
+    document.getElementById('is-active').checked = mapping.isActive;
+    document.getElementById('default-send-via-hub').checked = mapping.defaultSendViaHub;
+    document.getElementById('mapping-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('mapping-modal').classList.add('hidden');
+}
+
+async function saveMapping(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('mapping-id').value;
+    const data = {
+        internalRelationId: document.getElementById('internal-relation-id').value,
+        externalTenantCode: document.getElementById('external-tenant-code').value,
+        isActive: document.getElementById('is-active').checked,
+        defaultSendViaHub: document.getElementById('default-send-via-hub').checked,
+    };
+
+    const url = id
+        ? `/admin/relations/${id}`
+        : '{{ path('admin_relations_create') }}';
+    const method = id ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            closeModal();
+            loadMappings();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('Failed to save mapping');
+    }
+}
+
+async function deleteMapping(id) {
+    if (!confirm('Are you sure you want to delete this mapping?')) return;
+
+    try {
+        const response = await fetch(`/admin/relations/${id}`, {
+            method: 'DELETE',
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            loadMappings();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('Failed to delete mapping');
+    }
+}
+</script>
+{% endblock %}

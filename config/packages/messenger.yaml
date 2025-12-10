@@ -1,13 +1,47 @@
 framework:
     messenger:
-        # Simplified config - using sync transport for now
-        # To enable async: install symfony/doctrine-messenger and configure DSN
+        # Failure handling - store failed messages for retry
+        failure_transport: failed
+
         transports:
+            # Async transport using Redis for document processing
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                    stream: 'qbilhub_messages'
+                    group: 'qbilhub_consumers'
+                    consumer: 'consumer_%env(HOSTNAME)%'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 60000
+
+            # High priority queue for user-initiated actions
+            async_priority:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                    stream: 'qbilhub_priority'
+                    group: 'qbilhub_priority_consumers'
+                retry_strategy:
+                    max_retries: 5
+                    delay: 500
+                    multiplier: 2
+                    max_delay: 30000
+
+            # Failed message storage for inspection and manual retry
+            failed:
+                dsn: 'doctrine://default?queue_name=failed'
+
+            # Sync transport for development/testing
             sync: 'sync://'
 
         routing:
-            # Process synchronously for now
-            'App\Message\ProcessDocumentMessage': sync
-            'App\Message\SchemaExtractionMessage': sync
-            'App\Message\EntityResolutionMessage': sync
-            'App\Message\ActiveLearningFeedbackMessage': sync
+            # Document processing goes through async queue
+            'App\Message\ProcessDocumentMessage': async
+            'App\Message\SchemaExtractionMessage': async
+            'App\Message\EntityResolutionMessage': async
+            # Feedback is high priority - user is waiting
+            'App\Message\ActiveLearningFeedbackMessage': async_priority

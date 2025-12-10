@@ -11,11 +11,24 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qbilhub"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mercure:
     image: dunglas/mercure
@@ -23,8 +36,53 @@ services:
       SERVER_NAME: ':3000'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins *
     ports:
       - "3000:3000"
 
+  # Python Intelligence Service
+  python-service:
+    build:
+      context: ./python-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=gpt-4o-mini
+      - DEDUPE_MODEL_PATH=/app/models
+      - TRAINING_DATA_PATH=/app/training_data
+    volumes:
+      - python_models:/app/models
+      - python_training:/app/training_data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Symfony Messenger Worker (for production deployment)
+  # Uncomment when deploying with Docker
+  # messenger-worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: php bin/console messenger:consume async async_priority --time-limit=3600
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #   environment:
+  #     - DATABASE_URL=postgresql://qbilhub:qbilhub@postgres:5432/qbilhub?serverVersion=15
+  #     - MESSENGER_TRANSPORT_DSN=redis://redis:6379/messages
+  #     - PYTHON_SERVICE_URL=http://python-service:8000
+  #   restart: unless-stopped
+  #   deploy:
+  #     replicas: 2
+
 volumes:
   postgres_data:
+  redis_data:
+  python_models:
+  python_training:

@@ -7,10 +7,13 @@ namespace App\MessageHandler;
 use App\Message\EntityResolutionMessage;
 use App\Message\SchemaExtractionMessage;
 use App\Repository\ReceivedDocumentRepository;
+use App\Service\NotificationService;
 use App\Service\PythonServiceClient;
+use App\Service\PythonServiceException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\Exception\RecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsMessageHandler]
@@ -21,6 +24,7 @@ class SchemaExtractionMessageHandler
         private readonly EntityManagerInterface $entityManager,
         private readonly PythonServiceClient $pythonClient,
         private readonly MessageBusInterface $messageBus,
+        private readonly NotificationService $notificationService,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -33,6 +37,9 @@ class SchemaExtractionMessageHandler
             $this->logger->error('Document not found', ['documentId' => $message->getDocumentId()]);
             return;
         }
+
+        // Notify that processing has started
+        $this->notificationService->notifyProcessingStarted($document, 'Extracting schema');
 
         try {
             // Call Python service to extract schema
@@ -51,14 +58,68 @@ class SchemaExtractionMessageHandler
             ));
 
             $this->logger->info('Schema extracted successfully', ['documentId' => $document->getId()]);
+
+        } catch (PythonServiceException $e) {
+            $this->handlePythonServiceError($document, $e);
         } catch (\Exception $e) {
-            $this->logger->error('Schema extraction failed', [
+            $this->handleGenericError($document, $e);
+        }
+    }
+
+    private function handlePythonServiceError($document, PythonServiceException $e): void
+    {
+        if ($e->isConnectionError()) {
+            // Service is down - notify user and allow retry
+            $this->logger->warning('Python service unavailable during schema extraction', [
                 'documentId' => $document->getId(),
                 'error' => $e->getMessage()
             ]);
 
-            $document->setStatus('error');
+            $this->notificationService->notifyServiceUnavailable($document, 'Intelligence Service');
+
+            // Mark as queued (not error) so it can be retried
+            $document->setStatus('queued');
             $this->entityManager->flush();
+
+            // Throw recoverable exception for Messenger retry
+            throw new RecoverableMessageHandlingException(
+                'Python service unavailable, will retry',
+                0,
+                $e
+            );
         }
+
+        // Non-connection error - mark as error
+        $this->logger->error('Schema extraction failed', [
+            'documentId' => $document->getId(),
+            'errorType' => $e->getErrorType(),
+            'error' => $e->getMessage()
+        ]);
+
+        $document->setStatus('error');
+        $this->entityManager->flush();
+
+        $this->notificationService->notifyDocumentError(
+            $document,
+            $e->getErrorType(),
+            'Schema extraction failed. Please try again or contact support.'
+        );
+    }
+
+    private function handleGenericError($document, \Exception $e): void
+    {
+        $this->logger->error('Unexpected error during schema extraction', [
+            'documentId' => $document->getId(),
+            'error' => $e->getMessage()
+        ]);
+
+        $document->setStatus('error');
+        $this->entityManager->flush();
+
+        $this->notificationService->notifyDocumentError(
+            $document,
+            'unknown',
+            'An unexpected error occurred. Please try again or contact support.'
+        );
     }
 }
